@@ -1,0 +1,34 @@
+Ski
+Time Limit: 1000MS		Memory Limit: 65536K
+
+Description
+Michael likes skiing 100 it is not surprising, because skiing is very stimulating. But in order to obtain the speed, the slide area must be downward sloping, and when you slide into the bottom of the slope, you have to walk uphill or again to set you waiting for lifts. Michael wants to know if the load in a region of the bottom slope. Region is given by a two-dimensional array. Each figure represents an array of high points. The following is an example 
+
+1  2  3  4 5
+
+16 17 18 19 6
+
+15 24 25 20 7
+
+14 23 22 21 8
+
+13 12 11 10 9
+
+One can from one point to one of the adjacent up and down about four points, if and only if the reduction in height. In the example above, a sliding landslide is 24-17-16-1. Of course, 25-24-23- -3-2-1 longer... In fact, this is the longest one. 
+
+Input
+The first line of the input representation region of the number of rows and columns of R C (1 < = R, C; <= 100). Below is the R lines, each line contains C integers, representing the height h, 0<=h<=10000. 
+
+Output
+The output wavelength region length. 
+
+Sample Input
+5 5
+1 2 3 4 5
+16 17 18 19 6
+15 24 25 20 7
+14 23 22 21 8
+13 12 11 10 9
+
+Sample Output
+25
