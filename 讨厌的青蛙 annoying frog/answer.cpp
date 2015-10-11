@@ -1,88 +1,72 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
-struct plant {
-    int x;
-    int y;
-
-   
+struct Plant
+{
+    int x, y;
+    bool operator< (const Plant& p2) const { // binary_search 3rd argument const T& val
+        if (x == p2.x)
+            return y < p2.y;
+        return x < p2.x;
+    }
 };
 
-plant p[5001];
-int h,l,n;
+int r, c, n;
+Plant plants[5000];
 
-int compare(const void* e1,const void* e2)
-{
-    if (((*(plant*)e1).x - (*(plant*)e2).x)==0)
-    {
-        return (*(plant*)e1).y - (*(plant*)e2).y;
-    }
-    else
-        return (*(plant*)e1).x - (*(plant*)e2).x;
-}
-
-int steps(int i,int j,int n)
-{
-    plant temp;
-    int x,y;
-    x = p[j].x - p[i].x;
-    y = p[j].y - p[i].y;
-    temp.x = p[j].x+x;
-    temp.y = p[j].y+y;
-
-
-    int count = 1;
-    while (++count)
-    {
-        if (!bsearch(&temp,p,n,sizeof(plant),compare))
-        {
-            if (temp.x>h||(temp.y<1||temp.y>l))
-            {
-                return count;
-            }
-            return -1;
+int searchPath(const Plant secPlant, const int dx, const int dy){
+    Plant tmpPlant;
+    int steps = 2;
+    tmpPlant.x = secPlant.x + dx;
+    tmpPlant.y = secPlant.y + dy;
+    while( (tmpPlant.x <= r) && (tmpPlant.y >= 1 ) && (tmpPlant.y <= c) ) {
+        if (!binary_search(plants, plants + n, tmpPlant)) {
+            //每一步都必须踩倒水稻才算合理, 否则这就不是一条行走路径
+            steps = 0;
+            break;
         }
-        temp.x += x;
-        temp.y += y;
+        steps++;
+
+        
+        // cout << tmpPlant.x << "," << tmpPlant.y << endl;
+
+        tmpPlant.x += dx;
+        tmpPlant.y += dy;
     }
+    return steps;
 }
 
 int main()
 {
-    scanf("%d %d",&h,&l);
-    scanf("%d",&n);
-    for (int i=0;i<n;i++)
-    {
-        scanf("%d %d",&p[i].x,&p[i].y);
-    }
-    qsort(p,n,sizeof(plant),compare);
-    int max = 2;
-    for (int i=0;i<n-2;i++)
-    {
-        for (int j=i+1;j<n-1;j++)
-        {
-            //optimize
-            int x,y;
-            x = p[j].x - p[i].x;
-            y = p[j].y - p[i].y;
-            if (p[i].x-x>=1&&(p[i].y-y<=l&&p[i].y-y>=1))
+    int dx, dy, px, py, max = 2, steps;
+    cin >> r >> c;
+    cin >> n;
+    for (int i = 0; i < n; i++)
+        cin >> plants[i].x >> plants[i].y;
+    sort(plants, plants + n);
+
+    for (int i = 0; i < n-2; i++)
+        for (int j = i+1; j < n-1; j++) {
+            dx = plants[j].x - plants[i].x;
+            dy = plants[j].y - plants[i].y;
+            px = plants[i].x - dx;
+            py = plants[i].y - dy;
+            if ( (px>=1) && (py>=1) && (py<=c))
                 continue;
-            if (p[i].x+max*x>h)
+            if (plants[i].x + (max-1)*dx > r)
                 break;
-            if (p[i].y+max*y>l||p[i].y+max*y<1)
+            py = plants[i].y + (max-1)*dy;
+            if ( (py<1) || (py>c) )
                 continue;
+            
+            steps = searchPath(plants[j], dx, dy);
 
-            int temp = steps(i,j,n);
-            if (temp>max)
-            {
-                max = temp;
-            }
-
+            if (steps > max)
+                max = steps;
         }
-    }
-    if (max>=3)
-        cout<<max<<endl;
-    else
-        cout<<"0"<<endl;
+    if (max == 2)
+        max = 0;
+    cout << max << endl;
     return 0;
 }
