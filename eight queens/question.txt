@@ -1,0 +1,1 @@
+Find a way to arrange 8 queens on a chess board so that none of them share the same row, column or diagonal (eg, none of them mutually threats the other). Print all possible solutions.
