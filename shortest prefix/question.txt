@@ -1,0 +1,1 @@
+Given a string s and a set of strings D, find the shortest prefix of s which is not a prefix of any string in D.
